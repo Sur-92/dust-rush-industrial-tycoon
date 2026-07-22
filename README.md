@@ -19,13 +19,15 @@ godot --headless --path . --quit-after 3
 
 ## Direction
 
-- [Game design](docs/GAME_DESIGN.md)
+- [Game vision](docs/GAME_VISION.md)
+- [First proof-of-concept slice](docs/GAME_DESIGN.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Security baseline](docs/SECURITY_BASELINE.md)
+- [Claude Code working agreement](CLAUDE.md)
 - [Contributing](CONTRIBUTING.md)
 - [Security reports](.github/SECURITY.md)
 
-Read `AGENTS.md` and `docs/` before implementation. Keep the first change narrow: one customer, three machines, three collector choices, simple route decisions, visible results, scoring, and instant restart.
+Read `CLAUDE.md`, `AGENTS.md`, and `docs/GAME_VISION.md` before implementation. Keep the first change narrow: one customer, three machines, three collector choices, simple route decisions, visible results, scoring, and instant restart.
 
 ## Repository security
 
