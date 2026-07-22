@@ -24,6 +24,7 @@ The last command runs the deterministic proposal rule checks and exits non-zero 
 
 - [Game vision](docs/GAME_VISION.md)
 - [First proof-of-concept slice](docs/GAME_DESIGN.md)
+- [Verified engineering layer](docs/ENGINEERING_MODEL.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Security baseline](docs/SECURITY_BASELINE.md)
 - [Claude Code working agreement](CLAUDE.md)

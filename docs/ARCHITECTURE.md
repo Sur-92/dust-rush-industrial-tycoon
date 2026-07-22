@@ -17,6 +17,8 @@ Godot 4.7.1 is the baseline current stable patch when this repository was create
 - `assets/` holds original or properly licensed visual and audio source assets.
 - `tests/` will hold deterministic gameplay tests as systems appear.
 
+`docs/ENGINEERING_MODEL.md` owns the source hierarchy, formulas, units, scenario-input boundary, and safety limitations for any engineering detail shown to the player. Engineering inputs and coefficients belong in typed resources with provenance; deterministic scripts own calculations; scenes only present the resulting receipt.
+
 Scenes may emit intent through signals, but should not become a second home for scoring or simulation rules. Scripts must not reach into unrelated scene internals when a signal or explicit method can define the boundary.
 
 ## Scaffold behavior

@@ -9,6 +9,7 @@ Claude Code implements small, approved Dust Rush tickets. The product direction 
 3. `docs/ARCHITECTURE.md`
 4. The ticket and any other document it explicitly names
 5. `docs/SECURITY_BASELINE.md` when the change touches dependencies, files, networking, builds, imports, or external data
+6. `docs/ENGINEERING_MODEL.md` when the change displays or calculates CFM, duct sizing, velocity, pressure, fan performance, or safety guidance
 
 If these sources conflict, stop and describe the conflict before changing code. A ticket narrows the work; it does not silently rewrite the game vision or architecture.
 
