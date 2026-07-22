@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="CollectorDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/collector_definition.gd" id="1_definition"]
+
+[resource]
+script = ExtResource("1_definition")
+collector_id = &"balanced"
+display_name = "Balanced"
+capacity = 11
+equipment_cost = 13000
+install_seconds = 12
+tradeoff = "Enough capacity when the routes stay smooth."

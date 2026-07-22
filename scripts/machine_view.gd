@@ -1,42 +1,53 @@
 class_name MachineView
 extends Node2D
 
-## Placeholder isometric body for one machine on the shop floor.
+## One machine standing on the shop floor.
 ##
-## The view owns presentation only. A click on its silhouette is reported as
-## selection intent; the run controller decides which machine is selected and
-## hands the resulting state back through `set_selected`.
+## The view owns presentation only: it reports a click as selection intent and
+## renders whatever selection and route state the run controller hands back.
+##
+## Hit testing uses the logical isometric footprint below, never the artwork's
+## transparent pixels, so the click target stays generous and predictable.
 
 signal selection_requested(machine_id: StringName)
 
 const PAD_MARGIN: float = 0.18
-const LABEL_GAP: float = 12.0
+const LABEL_GAP: float = 10.0
 
 const PAD_COLOR: Color = Color(0.055, 0.071, 0.098, 0.85)
 const SELECTED_PAD_COLOR: Color = Color(0.318, 0.224, 0.106, 0.9)
 const BODY_TOP_COLOR: Color = Color(0.408, 0.475, 0.573)
 const BODY_RIGHT_COLOR: Color = Color(0.271, 0.325, 0.408)
 const BODY_LEFT_COLOR: Color = Color(0.192, 0.235, 0.302)
-const SELECTED_TOP_COLOR: Color = Color(0.957, 0.659, 0.267)
-const SELECTED_RIGHT_COLOR: Color = Color(0.769, 0.502, 0.176)
-const SELECTED_LEFT_COLOR: Color = Color(0.541, 0.341, 0.114)
 const RING_COLOR: Color = Color(0.957, 0.659, 0.267)
 const LABEL_COLOR: Color = Color(0.69, 0.749, 0.82)
 const SELECTED_LABEL_COLOR: Color = Color(0.976, 0.788, 0.482)
+const ROUTE_MISSING_COLOR: Color = Color(0.957, 0.659, 0.267)
+const ROUTE_SET_COLOR: Color = Color(0.588, 0.827, 0.722)
+const ROUTE_MISSING_TEXT: String = "Route needed"
 
 @export var definition: MachineDefinition
+
+@export_group("Footprint")
+## Top corner of the machine's floor footprint, in tile space.
 @export var tile_position: Vector2 = Vector2.ZERO
+## Footprint size in tiles. Also sets the width of the logical click target.
 @export var body_tiles: Vector2 = Vector2(2.0, 2.0)
+## Logical height in pixels. Sets how far the click target reaches above the floor.
 @export var body_height: float = 36.0
-@export var topper_offset_tiles: Vector2 = Vector2.ZERO
-@export var topper_tiles: Vector2 = Vector2.ZERO
-@export var topper_height: float = 0.0
+
+@export_group("Artwork")
+## Approved sprite. When empty the view falls back to placeholder geometry.
+@export var texture: Texture2D
+@export var texture_scale: float = 1.0
+## Source-texture pixel that rests on the footprint's front corner.
+@export var texture_anchor: Vector2 = Vector2.ZERO
 
 @onready var _name_label: Label = $NameLabel
+@onready var _route_label: Label = $RouteLabel
 
 var _selected: bool = false
 var _body_silhouette: PackedVector2Array = PackedVector2Array()
-var _topper_silhouette: PackedVector2Array = PackedVector2Array()
 
 
 func _ready() -> void:
@@ -47,11 +58,8 @@ func _ready() -> void:
 
 	position = Iso.to_screen(tile_position)
 	_body_silhouette = _silhouette(Vector2.ZERO, body_tiles, 0.0, body_height)
-	if _has_topper():
-		_topper_silhouette = _silhouette(
-			topper_offset_tiles, topper_tiles, body_height, topper_height
-		)
-	_place_name_label()
+	_place_labels()
+	set_route(null)
 	queue_redraw()
 
 
@@ -80,11 +88,21 @@ func set_selected(value: bool) -> void:
 	queue_redraw()
 
 
-## Hit test against the placeholder silhouette, in this node's local space.
+## Shows the route the controller has saved for this machine, so the choice
+## stays legible after the player selects a different machine.
+func set_route(route: RouteDefinition) -> void:
+	if route == null:
+		_route_label.text = ROUTE_MISSING_TEXT
+		_route_label.add_theme_color_override("font_color", ROUTE_MISSING_COLOR)
+	else:
+		_route_label.text = "%s route" % route.display_name
+		_route_label.add_theme_color_override("font_color", ROUTE_SET_COLOR)
+	_position_route_label()
+
+
+## Hit test against the logical footprint, in this node's local space.
 func contains_point(local_point: Vector2) -> bool:
-	if Geometry2D.is_point_in_polygon(local_point, _body_silhouette):
-		return true
-	return _has_topper() and Geometry2D.is_point_in_polygon(local_point, _topper_silhouette)
+	return Geometry2D.is_point_in_polygon(local_point, _body_silhouette)
 
 
 func _draw() -> void:
@@ -98,9 +116,10 @@ func _draw() -> void:
 	)
 	draw_colored_polygon(pad, SELECTED_PAD_COLOR if _selected else PAD_COLOR)
 
-	_draw_box(Vector2.ZERO, body_tiles, 0.0, body_height)
-	if _has_topper():
-		_draw_box(topper_offset_tiles, topper_tiles, body_height, topper_height)
+	if texture != null:
+		draw_texture_rect(texture, _texture_rect(), false)
+	else:
+		_draw_placeholder_box(Vector2.ZERO, body_tiles, 0.0, body_height)
 
 	if _selected:
 		var ring: PackedVector2Array = pad.duplicate()
@@ -108,21 +127,22 @@ func _draw() -> void:
 		draw_polyline(ring, RING_COLOR, 3.0)
 
 
-func _draw_box(
+## Places the artwork so `texture_anchor` lands on the footprint's front corner.
+func _texture_rect() -> Rect2:
+	var drawn_size: Vector2 = texture.get_size() * texture_scale
+	var front_corner: Vector2 = Iso.to_screen(body_tiles)
+	return Rect2(front_corner - texture_anchor * texture_scale, drawn_size)
+
+
+func _draw_placeholder_box(
 	offset_tiles: Vector2, size_tiles: Vector2, base_elevation: float, height: float
 ) -> void:
 	var base: PackedVector2Array = _face(offset_tiles, size_tiles, base_elevation)
 	var top: PackedVector2Array = _face(offset_tiles, size_tiles, base_elevation + height)
 
-	draw_colored_polygon(
-		PackedVector2Array([base[3], base[2], top[2], top[3]]),
-		SELECTED_LEFT_COLOR if _selected else BODY_LEFT_COLOR
-	)
-	draw_colored_polygon(
-		PackedVector2Array([base[2], base[1], top[1], top[2]]),
-		SELECTED_RIGHT_COLOR if _selected else BODY_RIGHT_COLOR
-	)
-	draw_colored_polygon(top, SELECTED_TOP_COLOR if _selected else BODY_TOP_COLOR)
+	draw_colored_polygon(PackedVector2Array([base[3], base[2], top[2], top[3]]), BODY_LEFT_COLOR)
+	draw_colored_polygon(PackedVector2Array([base[2], base[1], top[1], top[2]]), BODY_RIGHT_COLOR)
+	draw_colored_polygon(top, BODY_TOP_COLOR)
 
 
 ## Corners of one horizontal face, ordered north, east, south, west.
@@ -145,13 +165,18 @@ func _silhouette(
 	return PackedVector2Array([top[0], top[1], base[1], base[2], base[3], top[3]])
 
 
-func _has_topper() -> bool:
-	return topper_height > 0.0 and topper_tiles.x > 0.0 and topper_tiles.y > 0.0
-
-
-func _place_name_label() -> void:
+func _place_labels() -> void:
 	_name_label.text = definition.display_name
 	_name_label.add_theme_color_override("font_color", LABEL_COLOR)
 	_name_label.reset_size()
-	var south_corner: Vector2 = Iso.to_screen(body_tiles)
-	_name_label.position = south_corner + Vector2(-_name_label.size.x * 0.5, LABEL_GAP)
+	_name_label.position = Iso.to_screen(body_tiles) + Vector2(
+		-_name_label.size.x * 0.5, LABEL_GAP
+	)
+
+
+func _position_route_label() -> void:
+	_route_label.reset_size()
+	_route_label.position = Vector2(
+		Iso.to_screen(body_tiles).x - _route_label.size.x * 0.5,
+		_name_label.position.y + _name_label.size.y + 1.0
+	)
