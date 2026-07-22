@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MachineDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/machine_definition.gd" id="1_definition"]
+
+[resource]
+script = ExtResource("1_definition")
+machine_id = &"wide_belt_sander"
+display_name = "Wide-Belt Sander"
+collection_demand = 4
+description = "Continuous fine dust that quickly clouds the shop."

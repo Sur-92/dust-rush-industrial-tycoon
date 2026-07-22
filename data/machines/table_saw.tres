@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MachineDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/machine_definition.gd" id="1_definition"]
+
+[resource]
+script = ExtResource("1_definition")
+machine_id = &"table_saw"
+display_name = "Table Saw"
+collection_demand = 2
+description = "Steady chips and fine dust from cabinet parts."
