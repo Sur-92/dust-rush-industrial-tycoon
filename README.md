@@ -2,7 +2,7 @@
 
 Dust Rush is a compact Godot 2D industrial-management game: solve dust-collection jobs, improve the factory, and get as far as possible before a ten-minute clock expires.
 
-This repository is the secure proof-of-concept scaffold. It currently opens to a working countdown shell; it does **not** yet claim a playable customer job.
+This repository is the secure proof-of-concept scaffold. It currently opens to the cabinet-shop inspection view, where the ten-minute clock runs and the three shop machines can be selected and read; it does **not** yet claim a playable customer job.
 
 ## Start here
 
