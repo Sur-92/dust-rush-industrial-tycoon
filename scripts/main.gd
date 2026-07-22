@@ -12,22 +12,35 @@ const STATUS_PAUSED: String = "Run paused."
 const STATUS_FINISHED: String = "Time! Committing the proposal arrives with a later ticket."
 
 @onready var timer_label: Label = $Hud/TopBar/TimerLabel
-@onready var status_label: Label = $Hud/StatusLabel
+@onready var status_label: Label = $Hud/TopBar/StatusLabel
 @onready var pause_button: Button = $Hud/TopBar/PauseButton
 @onready var machines_root: Node2D = $Shop/Machines
 @onready var collector_cards_root: HBoxContainer = $Hud/CollectorSection/Cards
 @onready var info_panel: MachineInfoPanel = $Hud/RightColumn/MachinePanel
 @onready var proposal_panel: ProposalPanel = $Hud/RightColumn/ProposalPanel
+@onready var collector_view: CollectorView = $Shop/Collector
+@onready var duct_view: DuctView = $Shop/Ducts
+@onready var math_receipt: MathReceipt = $Hud/MathReceipt
+
+## Shared duct geometry and junction topology for this shop.
+@export var duct_network: DuctNetworkDefinition
+## One branch definition per machine and route approach.
+@export var duct_branches: Array[DuctBranchDefinition] = []
 
 var remaining_seconds: float = RUN_SECONDS
 var run_finished: bool = false
 var selected_machine_id: StringName = &""
 var proposal: SystemProposal = SystemProposal.new()
+var calculation: DuctCalculation = DuctCalculation.new()
 
 var _machine_views: Array[MachineView] = []
 var _collector_cards: Array[CollectorCard] = []
 var _routes_by_id: Dictionary[StringName, RouteDefinition] = {}
 var _collectors_by_id: Dictionary[StringName, CollectorDefinition] = {}
+var _branches_by_key: Dictionary[String, DuctBranchDefinition] = {}
+## Whether the run was already paused when the receipt opened, so closing it
+## restores what the player had rather than always resuming.
+var _paused_before_receipt: bool = false
 
 
 func _ready() -> void:
@@ -35,7 +48,12 @@ func _ready() -> void:
 	_collect_machine_views()
 	_collect_collector_cards()
 	_collect_route_definitions()
+	_collect_duct_branches()
 	proposal.set_machines(_machine_definitions())
+	calculation.configure(duct_network, _machine_definitions())
+	collector_view.configure(duct_network)
+	proposal_panel.math_requested.connect(open_math_receipt)
+	math_receipt.close_requested.connect(close_math_receipt)
 	reset_run()
 
 
@@ -72,6 +90,7 @@ func reset_run() -> void:
 	status_label.text = STATUS_DESIGNING
 	selected_machine_id = &""
 	proposal.clear()
+	close_math_receipt()
 	refresh_design()
 	update_timer_label()
 
@@ -146,6 +165,84 @@ func refresh_design() -> void:
 		)
 
 	proposal_panel.show_proposal(proposal)
+	refresh_duct_network()
+
+
+## Rebuilds the visible network and the airflow calculation from the proposal.
+## Only branches whose machine has a route appear, so an incomplete proposal
+## shows exactly what has been chosen so far.
+func refresh_duct_network() -> void:
+	var routed_ids: Array[StringName] = []
+	var runs: Array[DuctRunDefinition] = []
+	var highlighted: Array[StringName] = []
+
+	for machine: MachineDefinition in _machine_definitions():
+		var route: RouteDefinition = proposal.route_for(machine.machine_id)
+		if route == null:
+			continue
+
+		routed_ids.append(machine.machine_id)
+		var branch: DuctBranchDefinition = _branch_for(machine.machine_id, route.route_id)
+		if branch == null:
+			continue
+
+		for run: DuctRunDefinition in branch.all_runs():
+			runs.append(run)
+			if machine.machine_id == selected_machine_id:
+				highlighted.append(run.run_id)
+
+	calculation.set_routed_machines(routed_ids)
+
+	# A main only appears once the junction upstream of it carries air.
+	var collar_positions: Array[Vector3] = []
+	var collar_diameters: PackedFloat64Array = PackedFloat64Array()
+	for junction: DuctJunctionDefinition in duct_network.junctions:
+		if calculation.junction_airflow(junction.junction_id) <= 0.0:
+			continue
+		collar_positions.append(junction.position)
+		collar_diameters.append(junction.outlet_diameter_inches)
+
+		var main: DuctRunDefinition = duct_network.main_run(
+			StringName("%s_run" % junction.junction_id)
+		)
+		if main != null:
+			runs.append(main)
+
+	duct_view.show_runs(runs, highlighted)
+	duct_view.show_collars(collar_positions, collar_diameters)
+	collector_view.show_collector(proposal.collector)
+
+
+## The receipt pauses the countdown while it is open and hands the previous
+## running state back when it closes.
+func open_math_receipt() -> void:
+	if not proposal.is_complete() or math_receipt.is_open():
+		return
+
+	_paused_before_receipt = get_tree().paused
+	get_tree().paused = true
+	pause_button.disabled = true
+	math_receipt.open(calculation, proposal, _machine_definitions())
+
+
+func close_math_receipt() -> void:
+	if not math_receipt.is_open():
+		return
+
+	math_receipt.close()
+	get_tree().paused = _paused_before_receipt
+	pause_button.disabled = run_finished
+
+
+func _branch_for(machine_id: StringName, route_id: StringName) -> DuctBranchDefinition:
+	return _branches_by_key.get("%s/%s" % [machine_id, route_id])
+
+
+func _collect_duct_branches() -> void:
+	for branch: DuctBranchDefinition in duct_branches:
+		if branch == null:
+			continue
+		_branches_by_key["%s/%s" % [branch.machine_id, branch.route_id]] = branch
 
 
 func _machine_definitions() -> Array[MachineDefinition]:

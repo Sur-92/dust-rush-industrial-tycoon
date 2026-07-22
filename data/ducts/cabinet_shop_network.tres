@@ -1,0 +1,58 @@
+[gd_resource type="Resource" script_class="DuctNetworkDefinition" load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://data/duct_network_definition.gd" id="1_network"]
+[ext_resource type="Script" path="res://data/duct_junction_definition.gd" id="2_junction"]
+[ext_resource type="Script" path="res://data/duct_run_definition.gd" id="3_run"]
+
+[sub_resource type="Resource" id="Resource_sander_merge"]
+script = ExtResource("2_junction")
+junction_id = &"sander_merge"
+inlet_ids = Array[StringName]([])
+merges_machine_pickups = &"wide_belt_sander"
+outlet_diameter_inches = 6.0
+position = Vector3(5.3, 4.35, 124.0)
+display_name = "6-inch sander branch"
+explanation = "The sander's two 4-inch pickups carry 400 CFM each. They merge into one 6-inch branch before the shop main."
+
+[sub_resource type="Resource" id="Resource_main_7"]
+script = ExtResource("2_junction")
+junction_id = &"main_7"
+inlet_ids = Array[StringName]([&"table_saw", &"planer"])
+merges_machine_pickups = &""
+outlet_diameter_inches = 7.0
+position = Vector3(6.2, 3.0, 124.0)
+display_name = "7-inch main"
+explanation = "The 400 CFM table-saw branch and the 600 CFM planer branch meet here, so the main steps up from 4 and 5 inches to 7 inches."
+
+[sub_resource type="Resource" id="Resource_main_9"]
+script = ExtResource("2_junction")
+junction_id = &"main_9"
+inlet_ids = Array[StringName]([&"main_7", &"sander_merge"])
+merges_machine_pickups = &""
+outlet_diameter_inches = 9.0
+position = Vector3(4.6, 3.0, 124.0)
+display_name = "9-inch main"
+explanation = "The 800 CFM sander branch joins the 1,000 CFM main, so the duct steps up from 7 and 6 inches to 9 inches for the run to the collector."
+
+[sub_resource type="Resource" id="Resource_main_7_run"]
+script = ExtResource("3_run")
+run_id = &"main_7_run"
+diameter_inches = 7.0
+waypoints = PackedVector3Array(6.2, 3.0, 124.0, 4.6, 3.0, 124.0)
+bend_radius = 0.0
+
+[sub_resource type="Resource" id="Resource_main_9_run"]
+script = ExtResource("3_run")
+run_id = &"main_9_run"
+diameter_inches = 9.0
+waypoints = PackedVector3Array(4.6, 3.0, 124.0, 3.21, 3.0, 124.0)
+bend_radius = 0.0
+
+[resource]
+script = ExtResource("1_network")
+junctions = Array[Resource]([SubResource("Resource_sander_merge"), SubResource("Resource_main_7"), SubResource("Resource_main_9")])
+main_runs = Array[Resource]([SubResource("Resource_main_7_run"), SubResource("Resource_main_9_run")])
+terminal_junction_id = &"main_9"
+collector_inlet = Vector3(3.21, 3.0, 124.0)
+collector_pad_center = Vector2(2.1, 2.6)
+collector_pad_size = Vector2(2.2, 2.2)

@@ -4,6 +4,8 @@ extends PanelContainer
 ## Live review of the current proposal. Reads the proposal's own values so the
 ## formulas stay in one place; it performs no gameplay arithmetic itself.
 
+signal math_requested
+
 const UNKNOWN: String = "—"
 
 const READY_COLOR: Color = Color(0.588, 0.827, 0.722)
@@ -23,6 +25,11 @@ const VALUE_COLOR: Color = Color(0.953, 0.969, 0.984)
 @onready var _cost_value: Label = $Content/Grid/CostValue
 @onready var _time_value: Label = $Content/Grid/TimeValue
 @onready var _status_label: Label = $Content/Status
+@onready var _math_button: Button = $Content/MathButton
+
+
+func _ready() -> void:
+	_math_button.pressed.connect(func() -> void: math_requested.emit())
 
 
 func show_proposal(proposal: SystemProposal) -> void:
@@ -42,6 +49,9 @@ func show_proposal(proposal: SystemProposal) -> void:
 	_fit_value.add_theme_color_override("font_color", _fit_color(fit))
 
 	var complete: bool = proposal.is_complete()
+	# The receipt explains one exact network, so it stays unavailable until the
+	# player has actually chosen that network.
+	_math_button.disabled = not complete
 	_status_label.text = proposal.completion_text()
 	_status_label.add_theme_color_override(
 		"font_color", READY_COLOR if complete else INCOMPLETE_COLOR
