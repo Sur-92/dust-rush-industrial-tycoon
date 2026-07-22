@@ -1,0 +1,28 @@
+# Godot generated data
+.godot/
+
+# Builds and exports
+build/
+dist/
+exports/
+*.pck
+
+# Local environment and editor state
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.tmp
+
+# Credentials and local overrides
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Logs and crash output
+*.log
+crash_*.txt

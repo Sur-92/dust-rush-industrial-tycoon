@@ -1,0 +1,37 @@
+name: Validate Godot project
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-project-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-godot:
+    name: Validate Godot project
+    runs-on: ubuntu-latest
+    env:
+      GODOT_VERSION: 4.7.1
+      GODOT_ARCHIVE: Godot_v4.7.1-stable_linux.x86_64.zip
+      GODOT_SHA512: 4ccdab7a48eeccbe8819a2fc1f6262f8d72065d98601bcb3743fcbd7ebd39f373758a788ee3293a05ec5b2c48538266c437404312e372225cd2df273945a2de9
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Download verified Godot binary
+        run: |
+          curl --fail --location --silent --show-error \
+            --output "/tmp/${GODOT_ARCHIVE}" \
+            "https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}-stable/${GODOT_ARCHIVE}"
+          echo "${GODOT_SHA512}  /tmp/${GODOT_ARCHIVE}" | sha512sum --check --strict
+          unzip -q "/tmp/${GODOT_ARCHIVE}" -d /tmp/godot
+      - name: Load project in headless editor
+        run: /tmp/godot/Godot_v4.7.1-stable_linux.x86_64 --headless --path . --editor --quit
+      - name: Run project briefly
+        run: /tmp/godot/Godot_v4.7.1-stable_linux.x86_64 --headless --path . --quit-after 3
