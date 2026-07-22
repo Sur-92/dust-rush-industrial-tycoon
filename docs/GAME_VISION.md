@@ -39,6 +39,8 @@ The player reaches a meaningful choice within 30 seconds. There is no long tutor
 
 Every visible number should help make a decision. The game may model capacity, restriction, cost, installation time, energy, safety, and future growth, but it should reveal those ideas gradually and summarize them clearly.
 
+The primary view uses plain-language conclusions. An optional **Show the math** layer reveals the source airflow, duct-size changes, velocity, pressure losses, critical path, and collector operating point for players who want to understand or audit the engineering logic. The detail is available without becoming homework for everyone.
+
 ### 3. Decisions, not fiddly construction
 
 The player chooses machines, collectors, priorities, and route approaches. The game creates elbows, reducers, branches, hangers, and installation detail automatically. Freehand duct drafting is not part of the initial game.
@@ -103,13 +105,17 @@ The floor contains three dust-producing machines:
 - a planer; and
 - a wide-belt sander.
 
-For the proof of concept, engineering values are deliberately expressed as clear game units rather than claims of real-world system sizing. The three collector approaches are:
+For the proof of concept, the main decision remains summarized in clear game language. Behind it, an optional source-backed engineering receipt uses scenario-specific CFM, duct geometry, velocity, and pressure-loss calculations. Machine requirements are identified as customer/OEM scenario inputs rather than universal values, and the game never claims to produce a code-compliant real-world design. `docs/ENGINEERING_MODEL.md` owns this boundary and the verified calculation method.
+
+The three collector approaches are:
 
 - **Budget** — cheap and quick, but short on capacity;
 - **Balanced** — enough capacity when routed sensibly;
 - **Powerful** — forgiving and expansion-ready, but expensive and slower to install.
 
 Each machine offers two or three route choices. A short route may cross an obstacle or create a sharp restriction. A longer route may cost more but preserve airflow or future expansion. The game previews the direction of each tradeoff without revealing a guaranteed result.
+
+When requested, **Show the math** explains where branch CFM combines, why the duct steps up or down, how velocity and velocity pressure are derived, which fittings create loss, which route is critical, and how that resistance changes the collector's expected operating point.
 
 When the player starts the system:
 
@@ -172,6 +178,7 @@ The primary run screen contains:
 - current cash, reputation, and installation availability;
 - a compact customer/job panel;
 - contextual collector and route choices;
+- an optional **Show the math** engineering receipt;
 - one clear commit or **Start System** action;
 - a small result summary after startup.
 
@@ -210,6 +217,7 @@ Audio should reinforce state: fans spin up, filters pulse, tools install, ducts 
 - Fixed-isometric Godot 2D presentation
 - Typed GDScript
 - Data-driven jobs, machines, collectors, and results
+- Source-backed engineering scenario data and deterministic calculations governed by `docs/ENGINEERING_MODEL.md`
 - Gameplay state separated from scene presentation
 - No network service, account, telemetry, purchase, or external dependency in the proof of concept
 
@@ -243,6 +251,7 @@ Until separately approved, Dust Rush does not include:
 
 - freehand CAD-style duct drafting;
 - physically accurate fluid simulation;
+- construction-ready, code-compliant, stamped, or commissioning-grade system design;
 - manual welding, driving, lifting, or worker control;
 - a rotatable 3D factory or first-person mode;
 - deep employee scheduling, fabrication inventory, shipping, or accounting;
