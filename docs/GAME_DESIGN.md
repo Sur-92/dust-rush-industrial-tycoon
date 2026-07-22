@@ -1,5 +1,7 @@
 # Dust Rush: Industrial Tycoon — proof-of-concept design
 
+This document narrows the first implementation slice. `GAME_VISION.md` is the end-to-end product north star and controls if this shorter prototype note is ambiguous.
+
 ## Product promise
 
 Dust Rush is a fast industrial-management game: get as far as possible in ten minutes by solving increasingly difficult dust-collection jobs.
