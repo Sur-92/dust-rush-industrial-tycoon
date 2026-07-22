@@ -12,6 +12,8 @@ Verified on 2026-07-21 against `Sur-92/dust-rush-industrial-tycoon`.
 - Pull requests run dependency review and fail for vulnerabilities of moderate severity or higher.
 - Private vulnerability reporting is enabled and `.github/SECURITY.md` is published.
 - CodeQL default setup uses the extended query suite to analyze GitHub Actions workflow files.
+- Actions are limited to GitHub-owned actions, and GitHub requires every action reference to use a full commit SHA.
+- Workflow tokens are read-only by default and cannot approve pull requests.
 - The `Protect main` ruleset is active with no bypass actors.
 
 The ruleset requires:
@@ -24,7 +26,7 @@ The ruleset requires:
 - CodeQL to report no high-or-higher security alerts or error-level quality alerts;
 - no force pushes or deletion of `main`.
 
-GitHub Actions are pinned to full commit hashes and run with read-only repository permissions. The Godot workflow downloads the official 4.7.1 Linux binary and verifies its SHA-512 checksum before use.
+GitHub Actions are pinned to full commit hashes and run with read-only repository permissions. Both the workflow files and repository settings enforce this posture. The Godot workflow downloads the official 4.7.1 Linux binary and verifies its SHA-512 checksum before use.
 
 ## Platform and language limitations
 
