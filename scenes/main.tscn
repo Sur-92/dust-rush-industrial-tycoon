@@ -1,18 +1,29 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=27 format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/shop_floor.gd" id="2_floor"]
 [ext_resource type="Script" path="res://scripts/machine_view.gd" id="3_machine"]
 [ext_resource type="Script" path="res://scripts/machine_info_panel.gd" id="4_panel"]
-[ext_resource type="Resource" path="res://data/machines/table_saw.tres" id="5_table_saw"]
-[ext_resource type="Resource" path="res://data/machines/planer.tres" id="6_planer"]
-[ext_resource type="Resource" path="res://data/machines/wide_belt_sander.tres" id="7_sander"]
+[ext_resource type="Script" path="res://scripts/proposal_panel.gd" id="5_proposal"]
+[ext_resource type="Script" path="res://scripts/collector_card.gd" id="6_card"]
+[ext_resource type="Script" path="res://scripts/route_button.gd" id="7_route"]
+[ext_resource type="Resource" path="res://data/machines/table_saw.tres" id="8_table_saw"]
+[ext_resource type="Resource" path="res://data/machines/planer.tres" id="9_planer"]
+[ext_resource type="Resource" path="res://data/machines/wide_belt_sander.tres" id="10_sander"]
+[ext_resource type="Texture2D" path="res://assets/machines/table_saw.png" id="11_table_saw_art"]
+[ext_resource type="Texture2D" path="res://assets/machines/planer.png" id="12_planer_art"]
+[ext_resource type="Texture2D" path="res://assets/machines/wide_belt_sander.png" id="13_sander_art"]
+[ext_resource type="Resource" path="res://data/collectors/budget.tres" id="14_budget"]
+[ext_resource type="Resource" path="res://data/collectors/balanced.tres" id="15_balanced"]
+[ext_resource type="Resource" path="res://data/collectors/powerful.tres" id="16_powerful"]
+[ext_resource type="Resource" path="res://data/routes/direct.tres" id="17_direct"]
+[ext_resource type="Resource" path="res://data/routes/sweeping.tres" id="18_sweeping"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
-content_margin_left = 22.0
-content_margin_top = 20.0
-content_margin_right = 22.0
-content_margin_bottom = 22.0
+content_margin_left = 20.0
+content_margin_top = 13.0
+content_margin_right = 20.0
+content_margin_bottom = 13.0
 bg_color = Color(0.071, 0.09, 0.125, 1)
 border_width_left = 1
 border_width_top = 1
@@ -23,6 +34,90 @@ corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card_normal"]
+bg_color = Color(0.071, 0.09, 0.125, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.18, 0.22, 0.282, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card_hover"]
+bg_color = Color(0.106, 0.133, 0.176, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.302, 0.361, 0.443, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card_pressed"]
+bg_color = Color(0.153, 0.118, 0.063, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.957, 0.659, 0.267, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_route_normal"]
+bg_color = Color(0.086, 0.106, 0.145, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.243, 0.306, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_route_hover"]
+bg_color = Color(0.122, 0.149, 0.196, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.325, 0.388, 0.475, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_route_pressed"]
+bg_color = Color(0.153, 0.118, 0.063, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.957, 0.659, 0.267, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_route_disabled"]
+bg_color = Color(0.055, 0.071, 0.098, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.129, 0.157, 0.2, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -45,51 +140,62 @@ color = Color(0.031, 0.047, 0.071, 1)
 mouse_filter = 2
 
 [node name="Shop" type="Node2D" parent="."]
-position = Vector2(434, 196)
+position = Vector2(432, 122)
 
 [node name="Floor" type="Node2D" parent="Shop"]
 script = ExtResource("2_floor")
+tile_columns = 9
+tile_rows = 7
 
 [node name="Machines" type="Node2D" parent="Shop"]
 
 [node name="TableSaw" type="Node2D" parent="Shop/Machines"]
 script = ExtResource("3_machine")
-definition = ExtResource("5_table_saw")
-tile_position = Vector2(0.5, 4.9)
-body_tiles = Vector2(2.2, 1.8)
-body_height = 30.0
-topper_offset_tiles = Vector2(0.95, 0.3)
-topper_tiles = Vector2(0.3, 1.2)
-topper_height = 26.0
+definition = ExtResource("8_table_saw")
+tile_position = Vector2(0.2, 4.6)
+body_tiles = Vector2(2, 2)
+body_height = 68.0
+texture = ExtResource("11_table_saw_art")
+texture_scale = 0.231
+texture_anchor = Vector2(514.5, 870)
 
 [node name="NameLabel" type="Label" parent="Shop/Machines/TableSaw"]
 theme_override_font_sizes/font_size = 16
 
+[node name="RouteLabel" type="Label" parent="Shop/Machines/TableSaw"]
+theme_override_font_sizes/font_size = 13
+
 [node name="Planer" type="Node2D" parent="Shop/Machines"]
 script = ExtResource("3_machine")
-definition = ExtResource("6_planer")
-tile_position = Vector2(7, 0.7)
-body_tiles = Vector2(1.8, 1.8)
-body_height = 46.0
-topper_offset_tiles = Vector2(0, 0.55)
-topper_tiles = Vector2(1.8, 0.7)
-topper_height = 12.0
+definition = ExtResource("9_planer")
+tile_position = Vector2(6.6, 0.4)
+body_tiles = Vector2(2, 2)
+body_height = 99.0
+texture = ExtResource("12_planer_art")
+texture_scale = 0.241
+texture_anchor = Vector2(516.5, 902)
 
 [node name="NameLabel" type="Label" parent="Shop/Machines/Planer"]
 theme_override_font_sizes/font_size = 16
 
+[node name="RouteLabel" type="Label" parent="Shop/Machines/Planer"]
+theme_override_font_sizes/font_size = 13
+
 [node name="WideBeltSander" type="Node2D" parent="Shop/Machines"]
 script = ExtResource("3_machine")
-definition = ExtResource("7_sander")
-tile_position = Vector2(5.4, 4.6)
-body_tiles = Vector2(3, 2.2)
-body_height = 50.0
-topper_offset_tiles = Vector2(0.1, 0.5)
-topper_tiles = Vector2(2.8, 1.2)
-topper_height = 18.0
+definition = ExtResource("10_sander")
+tile_position = Vector2(4, 4)
+body_tiles = Vector2(3, 2)
+body_height = 52.0
+texture = ExtResource("13_sander_art")
+texture_scale = 0.266
+texture_anchor = Vector2(514.5, 828)
 
 [node name="NameLabel" type="Label" parent="Shop/Machines/WideBeltSander"]
 theme_override_font_sizes/font_size = 16
+
+[node name="RouteLabel" type="Label" parent="Shop/Machines/WideBeltSander"]
+theme_override_font_sizes/font_size = 13
 
 [node name="Hud" type="Control" parent="."]
 layout_mode = 1
@@ -104,10 +210,10 @@ mouse_filter = 2
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 48.0
-offset_top = 30.0
-offset_right = -48.0
-offset_bottom = 106.0
+offset_left = 40.0
+offset_top = 20.0
+offset_right = -40.0
+offset_bottom = 84.0
 grow_horizontal = 2
 mouse_filter = 2
 theme_override_constants/separation = 14
@@ -121,13 +227,13 @@ theme_override_constants/separation = 2
 [node name="Eyebrow" type="Label" parent="Hud/TopBar/Brand"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.957, 0.659, 0.267, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 14
 text = "TEN-MINUTE INDUSTRIAL SPRINT"
 
 [node name="Title" type="Label" parent="Hud/TopBar/Brand"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.953, 0.969, 0.984, 1)
-theme_override_font_sizes/font_size = 34
+theme_override_font_sizes/font_size = 32
 text = "DUST RUSH"
 
 [node name="Spacer" type="Control" parent="Hud/TopBar"]
@@ -139,91 +245,527 @@ mouse_filter = 2
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_colors/font_color = Color(0.953, 0.969, 0.984, 1)
-theme_override_font_sizes/font_size = 44
+theme_override_font_sizes/font_size = 40
 text = "10:00"
 
 [node name="PauseButton" type="Button" parent="Hud/TopBar"]
-custom_minimum_size = Vector2(128, 44)
+custom_minimum_size = Vector2(120, 42)
 layout_mode = 2
 size_flags_vertical = 4
 text = "Pause"
 
 [node name="RestartButton" type="Button" parent="Hud/TopBar"]
-custom_minimum_size = Vector2(128, 44)
+custom_minimum_size = Vector2(120, 42)
 layout_mode = 2
 size_flags_vertical = 4
 text = "Restart"
 
-[node name="InfoPanel" type="PanelContainer" parent="Hud"]
-custom_minimum_size = Vector2(0, 236)
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -352.0
-offset_top = 132.0
-offset_right = -48.0
-offset_bottom = 132.0
-grow_horizontal = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
-script = ExtResource("4_panel")
-
-[node name="Content" type="VBoxContainer" parent="Hud/InfoPanel"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 12
-
-[node name="Eyebrow" type="Label" parent="Hud/InfoPanel/Content"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.957, 0.659, 0.267, 1)
-theme_override_font_sizes/font_size = 13
-text = "CABINET SHOP"
-
-[node name="MachineName" type="Label" parent="Hud/InfoPanel/Content"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.953, 0.969, 0.984, 1)
-theme_override_font_sizes/font_size = 26
-autowrap_mode = 3
-text = "Select a machine"
-
-[node name="Demand" type="VBoxContainer" parent="Hud/InfoPanel/Content"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-
-[node name="DemandCaption" type="Label" parent="Hud/InfoPanel/Content/Demand"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.588, 0.639, 0.71, 1)
-theme_override_font_sizes/font_size = 13
-text = "COLLECTION DEMAND"
-
-[node name="DemandValue" type="Label" parent="Hud/InfoPanel/Content/Demand"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.588, 0.827, 0.722, 1)
-theme_override_font_sizes/font_size = 22
-text = "—"
-
-[node name="Description" type="Label" parent="Hud/InfoPanel/Content"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_colors/font_color = Color(0.69, 0.749, 0.82, 1)
-theme_override_font_sizes/font_size = 15
-text = "Click a machine on the shop floor to read what it needs."
-autowrap_mode = 3
-
 [node name="StatusLabel" type="Label" parent="Hud"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 40.0
+offset_top = 92.0
+offset_right = -360.0
+offset_bottom = 114.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.588, 0.827, 0.722, 1)
+theme_override_font_sizes/font_size = 16
+text = "Cabinet shop — choose a collector and a route for every machine."
+
+[node name="CollectorSection" type="VBoxContainer" parent="Hud"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 48.0
-offset_top = -70.0
-offset_right = 700.0
-offset_bottom = -38.0
+offset_left = 40.0
+offset_top = -170.0
+offset_right = 920.0
+offset_bottom = -20.0
 grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Caption" type="Label" parent="Hud/CollectorSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.957, 0.659, 0.267, 1)
+theme_override_font_sizes/font_size = 13
+text = "COLLECTOR — CHOOSE ONE"
+
+[node name="Cards" type="HBoxContainer" parent="Hud/CollectorSection"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="BudgetCard" type="Button" parent="Hud/CollectorSection/Cards"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/focus = SubResource("StyleBoxFlat_card_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_card_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_card_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_card_pressed")
+theme_override_styles/normal = SubResource("StyleBoxFlat_card_normal")
+script = ExtResource("6_card")
+definition = ExtResource("14_budget")
+
+[node name="Content" type="VBoxContainer" parent="Hud/CollectorSection/Cards/BudgetCard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 14.0
+offset_right = -16.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 5
+
+[node name="Header" type="HBoxContainer" parent="Hud/CollectorSection/Cards/BudgetCard/Content"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CollectorName" type="Label" parent="Hud/CollectorSection/Cards/BudgetCard/Content/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.953, 0.969, 0.984, 1)
+theme_override_font_sizes/font_size = 19
+
+[node name="Capacity" type="Label" parent="Hud/CollectorSection/Cards/BudgetCard/Content/Header"]
+layout_mode = 2
+size_flags_vertical = 4
 theme_override_colors/font_color = Color(0.588, 0.827, 0.722, 1)
-theme_override_font_sizes/font_size = 17
-text = "Cabinet shop — click a machine to inspect it."
+theme_override_font_sizes/font_size = 14
+
+[node name="Stats" type="Label" parent="Hud/CollectorSection/Cards/BudgetCard/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.69, 0.749, 0.82, 1)
+theme_override_font_sizes/font_size = 13
+
+[node name="Tradeoff" type="Label" parent="Hud/CollectorSection/Cards/BudgetCard/Content"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.588, 0.639, 0.71, 1)
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
+
+[node name="BalancedCard" type="Button" parent="Hud/CollectorSection/Cards"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/focus = SubResource("StyleBoxFlat_card_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_card_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_card_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_card_pressed")
+theme_override_styles/normal = SubResource("StyleBoxFlat_card_normal")
+script = ExtResource("6_card")
+definition = ExtResource("15_balanced")
+
+[node name="Content" type="VBoxContainer" parent="Hud/CollectorSection/Cards/BalancedCard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 14.0
+offset_right = -16.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 5
+
+[node name="Header" type="HBoxContainer" parent="Hud/CollectorSection/Cards/BalancedCard/Content"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CollectorName" type="Label" parent="Hud/CollectorSection/Cards/BalancedCard/Content/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.953, 0.969, 0.984, 1)
+theme_override_font_sizes/font_size = 19
+
+[node name="Capacity" type="Label" parent="Hud/CollectorSection/Cards/BalancedCard/Content/Header"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.588, 0.827, 0.722, 1)
+theme_override_font_sizes/font_size = 14
+
+[node name="Stats" type="Label" parent="Hud/CollectorSection/Cards/BalancedCard/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.69, 0.749, 0.82, 1)
+theme_override_font_sizes/font_size = 13
+
+[node name="Tradeoff" type="Label" parent="Hud/CollectorSection/Cards/BalancedCard/Content"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.588, 0.639, 0.71, 1)
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
+
+[node name="PowerfulCard" type="Button" parent="Hud/CollectorSection/Cards"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/focus = SubResource("StyleBoxFlat_card_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_card_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_card_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_card_pressed")
+theme_override_styles/normal = SubResource("StyleBoxFlat_card_normal")
+script = ExtResource("6_card")
+definition = ExtResource("16_powerful")
+
+[node name="Content" type="VBoxContainer" parent="Hud/CollectorSection/Cards/PowerfulCard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 14.0
+offset_right = -16.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 5
+
+[node name="Header" type="HBoxContainer" parent="Hud/CollectorSection/Cards/PowerfulCard/Content"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CollectorName" type="Label" parent="Hud/CollectorSection/Cards/PowerfulCard/Content/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.953, 0.969, 0.984, 1)
+theme_override_font_sizes/font_size = 19
+
+[node name="Capacity" type="Label" parent="Hud/CollectorSection/Cards/PowerfulCard/Content/Header"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.588, 0.827, 0.722, 1)
+theme_override_font_sizes/font_size = 14
+
+[node name="Stats" type="Label" parent="Hud/CollectorSection/Cards/PowerfulCard/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.69, 0.749, 0.82, 1)
+theme_override_font_sizes/font_size = 13
+
+[node name="Tradeoff" type="Label" parent="Hud/CollectorSection/Cards/PowerfulCard/Content"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.588, 0.639, 0.71, 1)
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
+
+[node name="RightColumn" type="VBoxContainer" parent="Hud"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -344.0
+offset_top = 88.0
+offset_right = -40.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 1
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="MachinePanel" type="PanelContainer" parent="Hud/RightColumn"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+script = ExtResource("4_panel")
+
+[node name="Content" type="VBoxContainer" parent="Hud/RightColumn/MachinePanel"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Eyebrow" type="Label" parent="Hud/RightColumn/MachinePanel/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.957, 0.659, 0.267, 1)
+theme_override_font_sizes/font_size = 12
+text = "CABINET SHOP"
+
+[node name="MachineName" type="Label" parent="Hud/RightColumn/MachinePanel/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.953, 0.969, 0.984, 1)
+theme_override_font_sizes/font_size = 22
+autowrap_mode = 3
+text = "Select a machine"
+
+[node name="Demand" type="VBoxContainer" parent="Hud/RightColumn/MachinePanel/Content"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="DemandCaption" type="Label" parent="Hud/RightColumn/MachinePanel/Content/Demand"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.588, 0.639, 0.71, 1)
+theme_override_font_sizes/font_size = 11
+text = "COLLECTION DEMAND"
+
+[node name="DemandValue" type="Label" parent="Hud/RightColumn/MachinePanel/Content/Demand"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.588, 0.827, 0.722, 1)
+theme_override_font_sizes/font_size = 18
+text = "—"
+
+[node name="Description" type="Label" parent="Hud/RightColumn/MachinePanel/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.69, 0.749, 0.82, 1)
+theme_override_font_sizes/font_size = 13
+text = "Click a machine on the shop floor to read what it needs."
+autowrap_mode = 3
+
+[node name="RouteCaption" type="Label" parent="Hud/RightColumn/MachinePanel/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.588, 0.639, 0.71, 1)
+theme_override_font_sizes/font_size = 11
+text = "DUCT ROUTE"
+
+[node name="RouteButtons" type="HBoxContainer" parent="Hud/RightColumn/MachinePanel/Content"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="DirectButton" type="Button" parent="Hud/RightColumn/MachinePanel/Content/RouteButtons"]
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/focus = SubResource("StyleBoxFlat_route_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_route_disabled")
+theme_override_styles/hover = SubResource("StyleBoxFlat_route_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_route_pressed")
+theme_override_styles/normal = SubResource("StyleBoxFlat_route_normal")
+script = ExtResource("7_route")
+definition = ExtResource("17_direct")
+
+[node name="Content" type="VBoxContainer" parent="Hud/RightColumn/MachinePanel/Content/RouteButtons/DirectButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = -10.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="RouteName" type="Label" parent="Hud/RightColumn/MachinePanel/Content/RouteButtons/DirectButton/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.953, 0.969, 0.984, 1)
+theme_override_font_sizes/font_size = 15
+
+[node name="RouteStats" type="Label" parent="Hud/RightColumn/MachinePanel/Content/RouteButtons/DirectButton/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.69, 0.749, 0.82, 1)
+theme_override_font_sizes/font_size = 11
+
+[node name="SweepingButton" type="Button" parent="Hud/RightColumn/MachinePanel/Content/RouteButtons"]
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/focus = SubResource("StyleBoxFlat_route_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_route_disabled")
+theme_override_styles/hover = SubResource("StyleBoxFlat_route_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_route_pressed")
+theme_override_styles/normal = SubResource("StyleBoxFlat_route_normal")
+script = ExtResource("7_route")
+definition = ExtResource("18_sweeping")
+
+[node name="Content" type="VBoxContainer" parent="Hud/RightColumn/MachinePanel/Content/RouteButtons/SweepingButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = -10.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="RouteName" type="Label" parent="Hud/RightColumn/MachinePanel/Content/RouteButtons/SweepingButton/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.953, 0.969, 0.984, 1)
+theme_override_font_sizes/font_size = 15
+
+[node name="RouteStats" type="Label" parent="Hud/RightColumn/MachinePanel/Content/RouteButtons/SweepingButton/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.69, 0.749, 0.82, 1)
+theme_override_font_sizes/font_size = 11
+
+[node name="RouteDetail" type="Label" parent="Hud/RightColumn/MachinePanel/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.588, 0.639, 0.71, 1)
+theme_override_font_sizes/font_size = 12
+text = "Select a machine to choose how its duct is routed."
+autowrap_mode = 3
+
+[node name="ProposalPanel" type="PanelContainer" parent="Hud/RightColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+script = ExtResource("5_proposal")
+
+[node name="Content" type="VBoxContainer" parent="Hud/RightColumn/ProposalPanel"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Eyebrow" type="Label" parent="Hud/RightColumn/ProposalPanel/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.957, 0.659, 0.267, 1)
+theme_override_font_sizes/font_size = 12
+text = "PROPOSAL REVIEW"
+
+[node name="Grid" type="GridContainer" parent="Hud/RightColumn/ProposalPanel/Content"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 2
+columns = 2
+
+[node name="DemandCaption" type="Label" parent="Hud/RightColumn/ProposalPanel/Content/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.69, 0.749, 0.82, 1)
+theme_override_font_sizes/font_size = 12
+text = "Machine demand"
+
+[node name="DemandValue" type="Label" parent="Hud/RightColumn/ProposalPanel/Content/Grid"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.953, 0.969, 0.984, 1)
+theme_override_font_sizes/font_size = 14
+text = "9"
+horizontal_alignment = 2
+
+[node name="CapacityCaption" type="Label" parent="Hud/RightColumn/ProposalPanel/Content/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.69, 0.749, 0.82, 1)
+theme_override_font_sizes/font_size = 12
+text = "Collector capacity"
+
+[node name="CapacityValue" type="Label" parent="Hud/RightColumn/ProposalPanel/Content/Grid"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.953, 0.969, 0.984, 1)
+theme_override_font_sizes/font_size = 14
+text = "—"
+horizontal_alignment = 2
+
+[node name="RestrictionCaption" type="Label" parent="Hud/RightColumn/ProposalPanel/Content/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.69, 0.749, 0.82, 1)
+theme_override_font_sizes/font_size = 12
+text = "Route restriction"
+
+[node name="RestrictionValue" type="Label" parent="Hud/RightColumn/ProposalPanel/Content/Grid"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.953, 0.969, 0.984, 1)
+theme_override_font_sizes/font_size = 14
+text = "0"
+horizontal_alignment = 2
+
+[node name="UsableCaption" type="Label" parent="Hud/RightColumn/ProposalPanel/Content/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.69, 0.749, 0.82, 1)
+theme_override_font_sizes/font_size = 12
+text = "Usable capacity"
+
+[node name="UsableValue" type="Label" parent="Hud/RightColumn/ProposalPanel/Content/Grid"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.953, 0.969, 0.984, 1)
+theme_override_font_sizes/font_size = 14
+text = "—"
+horizontal_alignment = 2
+
+[node name="MarginCaption" type="Label" parent="Hud/RightColumn/ProposalPanel/Content/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.69, 0.749, 0.82, 1)
+theme_override_font_sizes/font_size = 12
+text = "Capacity margin"
+
+[node name="MarginValue" type="Label" parent="Hud/RightColumn/ProposalPanel/Content/Grid"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.953, 0.969, 0.984, 1)
+theme_override_font_sizes/font_size = 14
+text = "—"
+horizontal_alignment = 2
+
+[node name="FitCaption" type="Label" parent="Hud/RightColumn/ProposalPanel/Content/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.69, 0.749, 0.82, 1)
+theme_override_font_sizes/font_size = 12
+text = "Expected fit"
+
+[node name="FitValue" type="Label" parent="Hud/RightColumn/ProposalPanel/Content/Grid"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.953, 0.969, 0.984, 1)
+theme_override_font_sizes/font_size = 14
+text = "—"
+horizontal_alignment = 2
+
+[node name="ExpansionCaption" type="Label" parent="Hud/RightColumn/ProposalPanel/Content/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.69, 0.749, 0.82, 1)
+theme_override_font_sizes/font_size = 12
+text = "Expansion room"
+
+[node name="ExpansionValue" type="Label" parent="Hud/RightColumn/ProposalPanel/Content/Grid"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.953, 0.969, 0.984, 1)
+theme_override_font_sizes/font_size = 14
+text = "—"
+horizontal_alignment = 2
+
+[node name="CostCaption" type="Label" parent="Hud/RightColumn/ProposalPanel/Content/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.69, 0.749, 0.82, 1)
+theme_override_font_sizes/font_size = 12
+text = "Proposal cost"
+
+[node name="CostValue" type="Label" parent="Hud/RightColumn/ProposalPanel/Content/Grid"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.953, 0.969, 0.984, 1)
+theme_override_font_sizes/font_size = 14
+text = "$0"
+horizontal_alignment = 2
+
+[node name="TimeCaption" type="Label" parent="Hud/RightColumn/ProposalPanel/Content/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.69, 0.749, 0.82, 1)
+theme_override_font_sizes/font_size = 12
+text = "Installation time"
+
+[node name="TimeValue" type="Label" parent="Hud/RightColumn/ProposalPanel/Content/Grid"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.953, 0.969, 0.984, 1)
+theme_override_font_sizes/font_size = 14
+text = "0 sec"
+horizontal_alignment = 2
+
+[node name="Status" type="Label" parent="Hud/RightColumn/ProposalPanel/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.957, 0.659, 0.267, 1)
+theme_override_font_sizes/font_size = 13
+text = "Still needs a collector and routes for 3 machines."
+autowrap_mode = 3
 
 [connection signal="pressed" from="Hud/TopBar/PauseButton" to="." method="_on_pause_pressed"]
 [connection signal="pressed" from="Hud/TopBar/RestartButton" to="." method="_on_restart_pressed"]

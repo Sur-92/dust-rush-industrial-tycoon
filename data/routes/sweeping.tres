@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="RouteDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/route_definition.gd" id="1_definition"]
+
+[resource]
+script = ExtResource("1_definition")
+route_id = &"sweeping"
+display_name = "Sweeping"
+restriction = 0
+cost = 1000
+install_seconds = 4
+tradeoff = "Longer and smoother, but costs more and takes longer."
