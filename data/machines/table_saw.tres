@@ -1,6 +1,14 @@
-[gd_resource type="Resource" script_class="MachineDefinition" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="MachineDefinition" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://data/machine_definition.gd" id="1_definition"]
+[ext_resource type="Script" path="res://data/engineering_source.gd" id="2_source"]
+
+[sub_resource type="Resource" id="Resource_source"]
+script = ExtResource("2_source")
+classification = 0
+basis = "SawStop specifies at least 400 CFM at the 4-inch port for a representative industrial cabinet saw."
+url = "https://www.sawstop.com/wp-content/uploads/2026/04/Industrial-Cabinet-Saw-Owners-Manual.pdf"
+accessed = "2026-07-22"
 
 [resource]
 script = ExtResource("1_definition")
@@ -8,3 +16,8 @@ machine_id = &"table_saw"
 display_name = "Table Saw"
 collection_demand = 2
 description = "Steady chips and fine dust from cabinet parts."
+airflow_cfm = 400
+pickup_count = 1
+pickup_diameter_inches = 4.0
+branch_diameter_inches = 4.0
+airflow_source = SubResource("Resource_source")

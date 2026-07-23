@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="DuctBranchDefinition" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://data/duct_branch_definition.gd" id="1_branch"]
+[ext_resource type="Script" path="res://data/duct_run_definition.gd" id="2_run"]
+
+[sub_resource type="Resource" id="Resource_pickup_0"]
+script = ExtResource("2_run")
+run_id = &"planer_sweeping_pickup_0"
+diameter_inches = 5.0
+waypoints = PackedVector3Array(7.7, 1.5, 130.0, 7.7, 1.5, 114.0)
+bend_radius = 0.0
+
+[sub_resource type="Resource" id="Resource_branch"]
+script = ExtResource("2_run")
+run_id = &"planer_sweeping_branch"
+diameter_inches = 5.0
+waypoints = PackedVector3Array(7.7, 1.5, 114.0, 8.4, 1.5, 114.0, 8.4, 3.6, 114.0, 6.2, 3.6, 114.0, 6.2, 3.0, 114.0)
+bend_radius = 0.55
+
+[resource]
+script = ExtResource("1_branch")
+machine_id = &"planer"
+route_id = &"sweeping"
+pickup_runs = Array[Resource]([SubResource("Resource_pickup_0")])
+branch_run = SubResource("Resource_branch")

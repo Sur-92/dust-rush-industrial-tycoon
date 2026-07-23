@@ -1,6 +1,14 @@
-[gd_resource type="Resource" script_class="MachineDefinition" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="MachineDefinition" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://data/machine_definition.gd" id="1_definition"]
+[ext_resource type="Script" path="res://data/engineering_source.gd" id="2_source"]
+
+[sub_resource type="Resource" id="Resource_source"]
+script = ExtResource("2_source")
+classification = 0
+basis = "Stiles lists 800 CFM through dual 4-inch outlets for a representative single-head Ironwood wide-belt sander."
+url = "https://stilesmachinery.com/wp-content/uploads/2022/09/MSS_S114K.pdf"
+accessed = "2026-07-22"
 
 [resource]
 script = ExtResource("1_definition")
@@ -8,3 +16,8 @@ machine_id = &"wide_belt_sander"
 display_name = "Wide-Belt Sander"
 collection_demand = 4
 description = "Continuous fine dust that quickly clouds the shop."
+airflow_cfm = 800
+pickup_count = 2
+pickup_diameter_inches = 4.0
+branch_diameter_inches = 6.0
+airflow_source = SubResource("Resource_source")
