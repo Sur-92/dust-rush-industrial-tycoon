@@ -20,6 +20,9 @@ const HIGHLIGHT_MID: Color = Color(0.945, 0.694, 0.325)
 const HIGHLIGHT_DARK: Color = Color(0.545, 0.361, 0.129)
 const COLLAR_COLOR: Color = Color(0.373, 0.427, 0.494)
 const COLLAR_EDGE: Color = Color(0.663, 0.706, 0.761)
+## Soft floor shadow that grounds the overhead runs so they do not float.
+const SHADOW_COLOR: Color = Color(0.0, 0.0, 0.0, 0.13)
+const SHADOW_WIDTH_SCALE: float = 0.85
 
 var _runs: Array[DuctRunDefinition] = []
 var _highlighted_run_ids: Array[StringName] = []
@@ -68,6 +71,10 @@ func clear() -> void:
 
 
 func _draw() -> void:
+	# Floor shadows first, so every pipe is grounded before it is drawn.
+	for run: DuctRunDefinition in _runs:
+		_draw_shadow(run)
+
 	for run: DuctRunDefinition in _runs:
 		_draw_run(run, _highlighted_run_ids.has(run.run_id))
 
@@ -106,6 +113,25 @@ func _draw_pipe_layer(
 	# Round off the joints so corners do not show wedge gaps.
 	for index: int in range(1, shifted.size() - 1):
 		draw_circle(shifted[index], width * 0.5, color)
+
+
+## Projects a run straight down onto the floor and draws it as a soft shadow,
+## which anchors the overhead pipe above the spot it covers.
+func _draw_shadow(run: DuctRunDefinition) -> void:
+	var path: PackedVector3Array = run.waypoints
+	if run.bend_radius > 0.0:
+		path = _rounded_path(path, run.bend_radius)
+
+	var floor_points: PackedVector2Array = PackedVector2Array()
+	for point: Vector3 in path:
+		floor_points.append(Iso.to_screen(Vector2(point.x, point.y)))
+	if floor_points.size() < 2:
+		return
+
+	var width: float = run.diameter_inches * PIXELS_PER_INCH * SHADOW_WIDTH_SCALE
+	draw_polyline(floor_points, SHADOW_COLOR, width, true)
+	for index: int in range(1, floor_points.size() - 1):
+		draw_circle(floor_points[index], width * 0.5, SHADOW_COLOR)
 
 
 func _draw_collar(position: Vector3, diameter_inches: float) -> void:
